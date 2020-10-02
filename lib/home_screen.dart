@@ -13,7 +13,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text("ExpendiSure"),
         backgroundColor: Colors.lightBlueAccent,
       ),
-      body: Container(),
+      body: Padding(
+          child: Container(),
+        padding: EdgeInsets.all(15.0);
+      )
     );
   }
 }
