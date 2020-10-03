@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
               Expanded(
                 child: Container(
-                color: Colors.yellow,
+                color: Colors.pink,
                   child: Center(child: Text("This is the first container"))),
               ),
     Expanded(
