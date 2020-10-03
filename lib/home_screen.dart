@@ -10,12 +10,40 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: Text("ExpendiSure"),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.red,
       ),
-      body: Padding(
-          child: Container(),
-        padding: EdgeInsets.all(15.0);
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Row(
+                children: <Widget>[
+              Expanded(
+                child: Container(
+                color: Colors.yellow,
+                  child: Center(child: Text("This is the first container"))),
+              ),
+    Expanded(
+      child: Container(
+      color: Colors.teal,
+      child: Center(child: Text("This is the first container"))),
+    ),
+                ],
+              ),
+            ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  color: Colors.blue,
+                  child: Center(child: Text("This is the second container"))
+                ),
+              )
+          ],
+        )
       )
     );
   }
