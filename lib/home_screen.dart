@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Container(
                 color: Colors.pink,
-                  child: Center(child: Text("This is the first container"))),
+                  child: Center(child: Text("This is the first container", style: TextStyle(color: Colors.black),))),
               ),
     Expanded(
       child: Container(
