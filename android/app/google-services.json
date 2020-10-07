@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1028404987520",
+    "firebase_url": "https://graphite-7b9e9.firebaseio.com",
+    "project_id": "graphite-7b9e9",
+    "storage_bucket": "graphite-7b9e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028404987520:android:514418f23cf019d0e7c865",
+        "android_client_info": {
+          "package_name": "com.kshitijv.expendisureapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028404987520-avv1b4t3hejvptdns7qkufkif0n58hvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPyMZK2hjvI0HkOeEyZg6JLe23Uc5WfN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028404987520-avv1b4t3hejvptdns7qkufkif0n58hvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
