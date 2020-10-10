@@ -9,51 +9,45 @@ class SplashPage extends StatefulWidget {
   @override
   _SplashPageState createState() => _SplashPageState();
 }
-enum LoginStatus{
-  NotDetermined,
-  LoggedIn,
-  NotLoggedIn
-}
+
+enum LoginStatus { NotDetermined, LoggedIn, NotLoggedIn }
+
 class _SplashPageState extends State<SplashPage> {
-  LoginStatus status=LoginStatus.NotDetermined;
+  LoginStatus status = LoginStatus.NotDetermined;
   @override
   void initState() {
-    fireauth _fire=fireauth();
+    fireauth _fire = fireauth();
     Future.delayed(const Duration(seconds: 3), () {
-    _fire.Current().then((current)
-    {
-      setState(() {
-        status=current==null?LoginStatus.NotLoggedIn:LoginStatus.LoggedIn;
+      _fire.Current().then((current) {
+        setState(() {
+          status =
+              current == null ? LoginStatus.NotLoggedIn : LoginStatus.LoggedIn;
+        });
       });
-    });});
+    });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    switch(status)
-    {
+    switch (status) {
       case LoginStatus.NotDetermined:
         {
           return MaterialApp(
-            home: Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Image.asset('assets/images/Graphite.PNG')
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 50.0, left: 10.0, right: 10.0),
-                      child:
-                        SpinKitFadingCube(color: Colors.black)
-                    ),
-                  )
-                ],
+              home: Scaffold(
+                  body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(child: Image.asset('assets/images/Graphite.PNG')),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: 50.0, left: 10.0, right: 10.0),
+                    child: SpinKitFadingCube(color: Colors.black)),
               )
-            )
-          );
+            ],
+          )));
         }
       case LoginStatus.LoggedIn:
         {
@@ -66,4 +60,3 @@ class _SplashPageState extends State<SplashPage> {
     }
   }
 }
-
