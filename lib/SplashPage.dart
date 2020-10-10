@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:expendisureapp/fireauth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'home_screen.dart';
@@ -34,8 +33,7 @@ class _SplashPageState extends State<SplashPage> {
     {
       case LoginStatus.NotDetermined:
         {
-          return MaterialApp(
-            home: Scaffold(
+          return Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -52,7 +50,6 @@ class _SplashPageState extends State<SplashPage> {
                   )
                 ],
               )
-            )
           );
         }
       case LoginStatus.LoggedIn:
