@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'signin.dart';
 import 'sign_up.dart';
 import 'widgets/RoundOutlineButton.dart';
+import 'fireauth.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  fireauth _auth=fireauth();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -45,8 +48,24 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                child: ButtonTheme(
+                                  minWidth: double.infinity,
+                                  child: RaisedButton(
+                                    color: Colors.black,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                    child: Text("Sign in with Google",style: TextStyle(color: Colors.white),),
+                                    onPressed: ()async{
+                                       UserCredential user=await _auth.googleSignIn();
+                                    },
+                                  ),
+                                ),
+                              ),
                               RoundOutlineButton(tex: "Sign In",onpress:(){ Navigator.push(context,MaterialPageRoute(builder: (context)=>SignInPage()));}),
-                              RoundOutlineButton(tex: "Sign Up",onpress:(){ Navigator.push(context,MaterialPageRoute(builder: (context)=>SignUp()));})
+                              RoundOutlineButton(tex: "Sign Up",onpress:(){ Navigator.push(context,MaterialPageRoute(builder: (context)=>SignUp()));}),
+
                             ],
                           ),
                         ),
