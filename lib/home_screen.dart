@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'content_page.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'profile.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,35 +27,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   colors: [Color(0xff3A4266), Color(0xff262E45)])),
           child: ListView(
             children: <Widget>[
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-                      child: Text(
-                        'Welcome Back',
-                        style: TextStyle(
-                            color: Color(0xffAFB6D2),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
-                      child: Text(
-                        'Kshitij',
-                        style: TextStyle(
-                            color: Color(0xffAFB6D2),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+//              Container(
+//                child: Column(
+//                  crossAxisAlignment: CrossAxisAlignment.start,
+//                  children: <Widget>[
+//                    Padding(
+//                      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+//                      child: Text(
+//                        'welcome back,',
+//                        style: TextStyle(
+//                            color: Color(0xffAFB6D2),
+//                            fontSize: 22,
+//                            fontWeight: FontWeight.bold,
+//                            fontFamily: 'Circular'),
+//                        textAlign: TextAlign.left,
+//                      ),
+//                    ),
+//                    Padding(
+//                      padding: EdgeInsets.only(top: 10, left: 20, right: 20),
+//                      child: Text(
+//                        'Kshitij',
+//                        style: TextStyle(
+//                            color: Color(0xffAFB6D2),
+//                            fontSize: 22,
+//                            fontWeight: FontWeight.bold, fontFamily: 'Circular'),
+//                        textAlign: TextAlign.left,
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Theme(
@@ -62,25 +64,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     cursorColor: Color(0xffAFB6D2),
                     hintColor: Colors.transparent,
                   ),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Color(0xffAFB6D2)),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 30,
-                          color: Color(0xffAFB6D2),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextFormField(
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              labelStyle: TextStyle(color: Color(0xffAFB6D2)),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: 30,
+                                color: Color(0xffAFB6D2),
+                              ),
+                              filled: true,
+                              fillColor: Color(0xff252C49),
+                              enabledBorder:
+                                  UnderlineInputBorder(borderSide: BorderSide.none),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xffAFB6D2),
+                                ),
+                              ),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+                              labelText: 'Search term'),
                         ),
-                        filled: true,
-                        fillColor: Color(0xff252C49),
-                        enabledBorder:
-                            UnderlineInputBorder(borderSide: BorderSide.none),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xffAFB6D2),
-                          ),
+                      ),
+                      Container(
+                        child: IconButton(
+                          icon: Icon(Icons.account_circle),
+                          iconSize: 40.0,
+                          onPressed:(){ Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Profile_page()));},
                         ),
-                        labelText: 'Search term'),
+                      )
+                    ],
                   ),
                 ),
               ),
