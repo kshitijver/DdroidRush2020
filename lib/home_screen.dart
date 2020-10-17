@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  List<Color> colors= [Color(0xff3A4266), Color(0xff262E45)];
   Widget build(BuildContext context) {
     return Scaffold(
 //      appBar: AppBar(
@@ -24,7 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
               gradient: LinearGradient(
                   begin: Alignment(0.0, -1.0),
                   end: Alignment(0.0, 1.0),
-                  colors: [Color(0xff3A4266), Color(0xff262E45)])),
+                colors: [Color(0xff3A4266), Color(0xff262E45)]
+                   ),),
           child: ListView(
             children: <Widget>[
 //              Container(
@@ -95,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           iconSize: 40.0,
                           onPressed:(){ Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Profile_page()));},
+                            MaterialPageRoute(builder: (context) => ProfilePage()));},
                         ),
                       )
                     ],

@@ -10,7 +10,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String email, password;
+  String email, password,name;
   fireauth _fire=fireauth();
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,9 @@ class _SignUpState extends State<SignUp> {
         children: <Widget>[
           SizedBox(
             height: 100.0,
+          ),
+          Center(
+            child: MyTextField(text: "Display Name",obscure: false,onchange: (value){name=value;},),
           ),
           Center(
             child: MyTextField(text: "Email",obscure: false,onchange: (value){email=value;},),
@@ -48,6 +51,7 @@ class _SignUpState extends State<SignUp> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                     onPressed: () async{
                       UserCredential user=await _fire.Create(email, password);
+                      user.user.updateProfile(displayName: name);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                     },
                   ),
