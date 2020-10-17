@@ -1,4 +1,4 @@
-# expendisureapp
+# Graphiteapp
 
 A new Flutter application.
 
