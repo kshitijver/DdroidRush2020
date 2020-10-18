@@ -63,6 +63,7 @@ class _SignUpState extends State<SignUp> {
                                         leading: new Icon(Icons.camera_alt),
                                         title: new Text('Upload from Camera'),
                                         onTap: () async {
+                                          Navigator.pop(context);
                                           _imageFile=await _img.pickImage(ImageSource.camera);
                                           file=await _img.cropImage(_imageFile);
                                           setState(() {
@@ -74,6 +75,7 @@ class _SignUpState extends State<SignUp> {
                                       leading: new Icon(Icons.photo),
                                       title: new Text('Upload from Gallery'),
                                       onTap: () async {
+                                        Navigator.pop(context);
                                       _imageFile=await _img.pickImage(ImageSource.gallery);
                                       file=await _img.cropImage(_imageFile);
                                       setState(() {
