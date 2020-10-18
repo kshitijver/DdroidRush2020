@@ -30,10 +30,10 @@ class image_handler
 
 
 
-  Future<Widget> getImage(BuildContext context) async {
+  Future<Widget> getImage(BuildContext context,String email) async {
     Image m;
     String uname=await getname();
-    String image="ProfilePictures/$uname";
+    String image="ProfilePictures/$email.png";
     await FireStorageService.loadFromStorage(context, image).then((downloadUrl) {
       m = Image.network(
         downloadUrl.toString(),

@@ -7,8 +7,8 @@ import 'image_handling.dart';
 import 'widgets/bottomsheet.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
+import 'package:firebase_image/firebase_image.dart';
 
 class SignUp extends StatefulWidget {
   @override

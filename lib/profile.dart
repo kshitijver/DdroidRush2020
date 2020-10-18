@@ -18,14 +18,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    setState(() {
-   handler?.getImage(context)?.then((userimg) {userimage=userimg;});
+    curr=widget.curr;
+    print(curr.email);
+
+   handler?.getImage(context,curr.email)?.then((userimg) {
+     setState(() {
+       userimage=userimg;
+     });
+
+   });
    if(userimage==null)
      {
        userimage=Image.asset('assets/images/avatar.png');
      }
-    });
-    curr=widget.curr;
+
+
     print(curr.displayName);
     print(curr.email);
     super.initState();
