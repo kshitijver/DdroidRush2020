@@ -49,7 +49,7 @@ class _SignInPageState extends State<SignInPage> {
                     onPressed: ()
                     async{
                       UserCredential user=await _fire.EmailPass(email, password);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: user.user)));
                     },
                   ),
                   width: double.infinity,

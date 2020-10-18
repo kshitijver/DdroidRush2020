@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'image_handling.dart';
 import 'fireauth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class ProfilePage extends StatefulWidget {
+  final User curr;
+  ProfilePage({this.curr});
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   final handler=image_handler();
-  Image userimage; String name;
+  Image userimage; String name; final _fire=fireauth();
+  User curr;
 
   @override
   void initState() {
@@ -17,12 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
    handler?.getImage(context)?.then((userimg) {userimage=userimg;});
    if(userimage==null)
      {
-       userimage=Image.asset('assets/images/Avatar.png');
+       userimage=Image.asset('assets/images/avatar.png');
      }
     });
+    curr=widget.curr;
+    print(curr.displayName);
+    print(curr.email);
     super.initState();
   }
-final _fire=fireauth();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +50,7 @@ final _fire=fireauth();
               if(value==2)
                 {
                   _fire.out();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Phoenix.rebirth(context);
                 }
           }),
           )
@@ -67,7 +75,7 @@ final _fire=fireauth();
               ),
               SizedBox(height: 25.0),
               Text(
-                'Abhishek Agrawal',
+                curr?.displayName==null?'Abhishek Agrawal':curr?.displayName,
                 style: TextStyle(
                     fontFamily: 'Circular',
                     fontSize: 20.0,
@@ -75,7 +83,7 @@ final _fire=fireauth();
               ),
               SizedBox(height: 4.0),
               Text(
-                'abhishekagr06@gmail.com',
+                curr?.email==null?'abhishekagr06@gmail.com':curr?.email,
                 style: TextStyle(fontFamily: 'Circular', color: Colors.grey),
               ),
               Padding(

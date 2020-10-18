@@ -10,33 +10,31 @@ import 'firestorageservice.dart';
 
 class image_handler
 {
-  PickedFile _imageFile;
   final FirebaseStorage _storage =
   FirebaseStorage(storageBucket: 'gs://graphite-7b9e9.appspot.com');
   StorageUploadTask _uploadTask;
   final _fire=fireauth();
 
-  Future<void> cropImage() async {
+  Future<File> cropImage(PickedFile imageFile) async {
     File cropped = await ImageCropper.cropImage(
-      sourcePath: _imageFile.path,
+      sourcePath: imageFile.path,
     );
-    _imageFile = cropped ?? _imageFile;
+    return cropped ?? File(imageFile.path);
   }
 
   final ImagePicker _picker = ImagePicker();
-  Future<void> pickImage(ImageSource source) async {
+  Future<PickedFile> pickImage(ImageSource source) async {
     PickedFile selected = await _picker.getImage(source: source);
-    _imageFile = selected;
+    return selected;
   }
 
-  void clear() {
-    _imageFile = null;
-  }
+
 
   Future<Widget> getImage(BuildContext context) async {
-    Image m; String image=await getname();
-    await FireStorageService.loadFromStorage(context, image)
-        .then((downloadUrl) {
+    Image m;
+    String uname=await getname();
+    String image="ProfilePictures/$uname";
+    await FireStorageService.loadFromStorage(context, image).then((downloadUrl) {
       m = Image.network(
         downloadUrl.toString(),
         fit: BoxFit.scaleDown,
@@ -46,9 +44,8 @@ class image_handler
     return m;
   }
 
-  startUpload(File file) async{
-    String name=await getname();
-    String filePath = 'ProfilePictures/$name.png';
+  startUpload(File file,String path) async{
+    String filePath = path;
     _uploadTask = _storage.ref().child(filePath).putFile(file);
     }
 

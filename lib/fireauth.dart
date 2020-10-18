@@ -24,6 +24,10 @@ class fireauth {
     await _auth.signOut();
   }
 
+  Future<User> Reload() async{
+    await _auth.currentUser.reload();
+  }
+
   Future<User> Current() async {
     User current = await _auth.currentUser;
     return current;

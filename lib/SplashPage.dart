@@ -3,6 +3,7 @@ import 'package:expendisureapp/fireauth.dart';
 import 'login_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ enum LoginStatus{
 }
 class _SplashPageState extends State<SplashPage> {
   LoginStatus status=LoginStatus.NotDetermined;
+  User curr=null;
   @override
   void initState() {
     fireauth _fire=fireauth();
@@ -23,6 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     {
       setState(() {
         status=current==null?LoginStatus.NotLoggedIn:LoginStatus.LoggedIn;
+        curr=current;
       });
     });});
     super.initState();
@@ -54,7 +57,7 @@ class _SplashPageState extends State<SplashPage> {
         }
       case LoginStatus.LoggedIn:
         {
-          return HomeScreen();
+          return HomeScreen(curr: curr);
         }
       case LoginStatus.NotLoggedIn:
         {
