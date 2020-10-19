@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'widgets/mytextfield.dart';
 import 'fireauth.dart';
 import 'home_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+
   String email, password;
   fireauth _fire=fireauth();
   @override
@@ -48,8 +50,21 @@ class _SignInPageState extends State<SignInPage> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                     onPressed: ()
                     async{
-                      UserCredential user=await _fire.EmailPass(email, password);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: user.user)));
+                      try
+                      {UserCredential user=await _fire.EmailPass(email, password);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: user.user)));}
+                      catch(e)
+                      {
+                        Fluttertoast.showToast(
+                            msg: e.message,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 12.0
+                        );
+                      }
                     },
                   ),
                   width: double.infinity,

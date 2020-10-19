@@ -5,10 +5,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'fireauth.dart';
 import 'image_handling.dart';
 import 'widgets/bottomsheet.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:firebase_image/firebase_image.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
+
+
+Future<File> getImageFileFromAssets(String path) async {
+  final byteData = await rootBundle.load('assets/$path');
+
+  final file = File('${(await getTemporaryDirectory()).path}/$path');
+  await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+  return file;
+}
+
 
 class SignUp extends StatefulWidget {
   @override
@@ -18,7 +31,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String email, password,name; image_handler _img=image_handler();
   fireauth _fire=fireauth(); Image userimg; bottomsheet bs=bottomsheet();
-  PickedFile _imageFile; File file;
+  PickedFile _imageFile; File file; Color loader=Colors.white; bool uploaded=false;
   @override
   void initState() {
     userimg=Image.asset('assets/images/avatar.png');
@@ -27,6 +40,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -49,7 +63,7 @@ class _SignUpState extends State<SignUp> {
                 CircleAvatar(
                   child: IconButton(
                     icon: Icon(Icons.edit,color: Colors.white,
-                    ), 
+                    ),
                     onPressed: ()
                     {
                       setState(() {
@@ -68,6 +82,7 @@ class _SignUpState extends State<SignUp> {
                                           file=await _img.cropImage(_imageFile);
                                           setState(() {
                                             userimg=Image.file(file);
+                                            uploaded=true;
                                           });
                                         }
                                     ),
@@ -80,6 +95,7 @@ class _SignUpState extends State<SignUp> {
                                       file=await _img.cropImage(_imageFile);
                                       setState(() {
                                         userimg=Image.file(file);
+                                        uploaded=true;
                                       });
                                       },
                                     ),
@@ -102,16 +118,18 @@ class _SignUpState extends State<SignUp> {
           ),
           SizedBox(height: 10.0),
           Center(
-            child: MyTextField(text: "Email",obscure: false,onchange: (value){email=value;},),
+            child: MyTextField(text: "Email",obscure: false,onchange: (value){email=value.toLowerCase();},),
           ),
           SizedBox(height: 10.0,),
           Center(
             child: MyTextField(text: "Password", obscure: true,onchange: (value){password=value;}),
           ),
+          SpinKitFadingCube(color: loader,),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+
                 Container(
 
                   child: RaisedButton(
@@ -122,13 +140,47 @@ class _SignUpState extends State<SignUp> {
                     hoverColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                     onPressed: () async{
-                      UserCredential user=await _fire.Create(email, password);
+                      if(uploaded==true)
+                     { setState(() {
+                        loader=Colors.black;
+                      });
+                      try
+                      {
+                        UserCredential user=await _fire.Create(email, password);
                       await user.user.updateProfile(displayName: name,);
                       await user.user.updateEmail(email);
                       _fire.Reload();
                       User curr=await _fire.Current();
+
                       await _img.startUpload(file, 'ProfilePictures/$email.png');
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: curr)));
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: curr)));}
+                      catch(e)
+                      {
+                        Fluttertoast.showToast(
+                            msg: e.message,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 12.0
+                        );
+                        setState(() {
+                          loader=Colors.white;
+                        });
+                      }}
+                      else
+                        {
+                          Fluttertoast.showToast(
+                              msg: "Profile picture cannot be blank",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 3,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 12.0);
+                        }
                     },
                   ),
                   width: double.infinity,

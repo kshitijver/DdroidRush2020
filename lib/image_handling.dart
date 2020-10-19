@@ -24,7 +24,7 @@ class image_handler
 
   final ImagePicker _picker = ImagePicker();
   Future<PickedFile> pickImage(ImageSource source) async {
-    PickedFile selected = await _picker.getImage(source: source);
+    PickedFile selected = await _picker.getImage(source: source,imageQuality: 20);
     return selected;
   }
 
