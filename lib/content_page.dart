@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ContentPage extends StatelessWidget {
   final String country;
   final String city;
-  final String image;
+  final Image image;
 
   ContentPage(
       {@required this.country, @required this.city, @required this.image});
@@ -25,7 +25,7 @@ class ContentPage extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 child: Image(
-                  image: AssetImage(image),
+                  image: image?.image,
                   fit: BoxFit.cover,
                 ),
               ),
