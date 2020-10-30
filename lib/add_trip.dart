@@ -13,7 +13,7 @@ class MySpecialCard extends StatefulWidget {
 class _MySpecialCardState extends State<MySpecialCard> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference trips = FirebaseFirestore.instance.collection('Trips');
-  User curr; int exp; String dest;
+  User curr; int exp; String dest; var ret= List<String>();
 
 
   Future<void> addTrip(User us,String date, int exp, String dest) {
@@ -24,8 +24,10 @@ class _MySpecialCardState extends State<MySpecialCard> {
       'Destination': dest,
       'Expenditure': exp// 42
     })
-        .then((value) => print("Trip Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+        .then((value) { print("Trip Added");
+        ret.add(dest);
+        ret.add(date);})
+        .catchError((error) => print("Failed to add trip: $error"));
   }
 @override
   void initState() {
@@ -37,6 +39,7 @@ class _MySpecialCardState extends State<MySpecialCard> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(title: Text("Add new trip"),backgroundColor: Colors.black,),
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 25.0),
@@ -92,7 +95,7 @@ class _MySpecialCardState extends State<MySpecialCard> {
                   onPressed: ()
                     async{
                     await addTrip(curr, "${AppointmentContainerState.selectedDate.toLocal()}".split(' ')[0], exp, AppointmentContainerState.dest);
-                    Navigator.pop(context);
+                    Navigator.pop(context, ret);
                     },
                 ),
                 width: double.infinity,

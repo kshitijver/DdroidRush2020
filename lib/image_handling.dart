@@ -49,6 +49,12 @@ class image_handler
     _uploadTask = _storage.ref().child(filePath).putFile(file);
     }
 
+  startUploadMeta(File file,String path, StorageMetadata metaData) async{
+    String filePath = path;
+    _uploadTask = _storage.ref().child(filePath).putFile(file,metaData);
+  }
+
+
   Future<String> getname() async{
     User current=await _fire.Current();
     String name=current.displayName;
