@@ -17,6 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -28,6 +29,8 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(
             height: 100.0,
           ),
+          Image.asset('assets/images/Graphite.PNG'),
+          Spacer(),
           Center(
             child: MyTextField(text: "Email",obscure: false,onchange: (value){email=value;},),
           ),
