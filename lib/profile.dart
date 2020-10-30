@@ -3,6 +3,8 @@ import 'image_handling.dart';
 import 'fireauth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'add_trip.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   final User curr;
@@ -14,7 +16,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final handler=image_handler();
   Image userimage; String name; final _fire=fireauth();
-  User curr;
+  User curr;   CollectionReference trips = FirebaseFirestore.instance.collection('Trips');
+  var list = List<ListTile>(); int totexp=0; int tripnumber=0;
 
   @override
   void initState() {
@@ -35,6 +38,35 @@ class _ProfilePageState extends State<ProfilePage> {
 
     print(curr.displayName);
     print(curr.email);
+    FirebaseFirestore.instance
+        .collection('Trips')
+        .where('uid', isEqualTo: curr.uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+      querySnapshot.docs.forEach((doc) {
+        print(doc['Expenditure'.toString()]);
+        list.add(ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          leading: Container(
+            padding: EdgeInsets.only(right: 12.0,top: 4.0),
+            decoration: new BoxDecoration(
+                border: new Border(
+                    right: new BorderSide(width: 1.0, color: Colors.white24))),
+            child: Icon(Icons.settings_backup_restore, color: Colors.grey),
+          ),
+          title: Text(doc['Destination']),
+          subtitle: Text(doc['Date']),
+        ));
+        setState(() {
+          totexp=totexp+doc['Expenditure'];
+          tripnumber++;
+          print(totexp);
+        });
+      })
+    });
+   setState(() {
+     print("haha");
+   });
     super.initState();
   }
 
@@ -58,6 +90,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 {
                   _fire.out();
                   Phoenix.rebirth(context);
+                }
+              if(value==1)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MySpecialCard(curr: curr,))).then((value){setState(() {
+                    print("Page refreshes");
+                  });});
                 }
           }),
           )
@@ -98,45 +136,41 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            '\$1400',
-                            style: TextStyle(
-                                fontFamily: 'Circular',
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text(
-                            'SPENT',
-                            style: TextStyle(
-                                fontFamily: 'Circular',
-                                color: Colors.grey),
-                          )
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          '\$$totexp',
+                          style: TextStyle(
+                              fontFamily: 'Circular',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(
+                          'SPENT',
+                          style: TextStyle(
+                              fontFamily: 'Circular',
+                              color: Colors.grey),
+                        )
+                      ],
                     ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            '31',
-                            style: TextStyle(
-                                fontFamily: 'Circular',
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text(
-                            'TRIPS',
-                            style: TextStyle(
-                                fontFamily: 'Circular',
-                                color: Colors.grey),
-                          )
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          tripnumber.toString(),
+                          style: TextStyle(
+                              fontFamily: 'Circular',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(
+                          'TRIPS',
+                          style: TextStyle(
+                              fontFamily: 'Circular',
+                              color: Colors.grey),
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -154,6 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
+              Column(
+                children: list,
+              )
             ],
           )
         ],
