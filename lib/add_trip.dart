@@ -18,7 +18,7 @@ class _MySpecialCardState extends State<MySpecialCard> {
 
   Future<void> addTrip(User us,String date, int exp, String dest) {
     return trips
-        .add({
+        .doc('$dest$date').set({
       'uid': us.uid,
       'Date': date, // Stokes and Sons
       'Destination': dest,
@@ -26,7 +26,8 @@ class _MySpecialCardState extends State<MySpecialCard> {
     })
         .then((value) { print("Trip Added");
         ret.add(dest);
-        ret.add(date);})
+        ret.add(date);
+        ret.add(exp.toString());})
         .catchError((error) => print("Failed to add trip: $error"));
   }
 @override

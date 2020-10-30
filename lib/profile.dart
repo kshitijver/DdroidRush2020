@@ -1,4 +1,3 @@
-import 'package:expendisureapp/firestorageservice.dart';
 import 'package:flutter/material.dart';
 import 'image_handling.dart';
 import 'fireauth.dart';
@@ -40,20 +39,22 @@ class _ProfilePageState extends State<ProfilePage> {
   bool uploaded = false;
   String phototitle;
   Image userimg;
-  int mode=1;
+  int mode = 1;
   String uid;
-  Color colorselected=Colors.black;
-  Color unselected=Colors.grey;
-  firebase_storage.StorageReference ref=firebase_storage.FirebaseStorage.instance.ref().child('destinations');
+  Color colorselected = Colors.black;
+  Color unselected = Colors.grey;
+  firebase_storage.StorageReference ref =
+      firebase_storage.FirebaseStorage.instance.ref().child('destinations');
   firebase_storage.StorageMetadata metadata;
-
   @override
   void initState() {
     curr = widget.curr;
     images.add(GestureDetector(
       child: Hero(
         tag: 'imageHero',
-        child: PhotoView(imageProvider: AssetImage("assets/images/Berlin.jpg"),),
+        child: PhotoView(
+          imageProvider: AssetImage("assets/images/Berlin.jpg"),
+        ),
       ),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -61,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }));
       },
     ));
-    uid=curr.uid;
+    uid = curr.uid;
     print(curr.email);
 
     handler?.getImage(context, curr.email)?.then((userimg) {
@@ -97,7 +98,34 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icon(Icons.settings_backup_restore, color: Colors.grey),
                   ),
                   title: Text(doc['Destination']),
-                  subtitle: Text(doc['Date']),
+                  subtitle: Row(
+                    children: [
+                      Text(doc['Date']),
+                      Spacer(),
+                      Text("\$" + doc['Expenditure'].toString())
+                    ],
+                  ),
+                  trailing: PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                      ),
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Padding(
+                                padding: EdgeInsets.all(2.0),
+                                child: Text('Delete trip'),
+                              ),
+                              value: 1,
+                            ),
+                          ],
+                      onSelected: ((value) async {
+                        if (value == 1) {
+                            setState(() async{
+                              await trips.doc(doc['Destination']+doc['Date']).delete();
+                            });
+                        }
+                      })),
                 ));
                 setState(() {
                   totexp = totexp + doc['Expenditure'];
@@ -106,8 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 });
               })
             });
-      metadata =
-    firebase_storage.StorageMetadata(
+    metadata = firebase_storage.StorageMetadata(
       customMetadata: <String, String>{
         'userId': uid,
       },
@@ -116,20 +143,19 @@ class _ProfilePageState extends State<ProfilePage> {
     super.didChangeDependencies();
   }
 
-  static const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  static const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   Random _rnd = Random();
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
-  uploadimage()
-  async{
+  uploadimage() async {
     if (uploaded == true) {
       try {
         print("try block triggered");
-        String rnd=getRandomString(15);
-        await _img.startUploadMeta(
-            file, 'TripPhotos/$uid\_$rnd.png',metadata);
+        String rnd = getRandomString(15);
+        await _img.startUploadMeta(file, 'TripPhotos/$uid\_$rnd.png', metadata);
         Navigator.pop(context);
       } catch (e) {
         Fluttertoast.showToast(
@@ -141,15 +167,17 @@ class _ProfilePageState extends State<ProfilePage> {
             textColor: Colors.white,
             fontSize: 12.0);
       }
+    } else {
+      print("else block");
     }
-    else
-    {print("else block");}
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget mode1=Column(children: list,);
-    Widget mode2=CustomScrollView(
+    Widget mode1 = Column(
+      children: list,
+    );
+    Widget mode2 = CustomScrollView(
       shrinkWrap: true,
       primary: false,
       slivers: <Widget>[
@@ -159,12 +187,13 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisSpacing: 1, //horizontal space
               crossAxisSpacing: 1, //vertical space
               crossAxisCount: 3, //number of images for a row
-              children: images
-          ),
+              children: images),
         ),
+        SizedBox(height: 1000,)
       ],
     );
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
           child: Icon(Icons.photo),
@@ -209,8 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   });
             });
-            if(bool==true)
-              print("bool true");
+            if (bool == true) print("bool true");
             await uploadimage();
           }),
       appBar: AppBar(
@@ -270,7 +298,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         Icon(Icons.settings_backup_restore, color: Colors.grey),
                   ),
                   title: Text(ret[0]),
-                  subtitle: Text(ret[1]),
+                  subtitle: Row(
+                    children: [
+                      Text(ret[1]),
+                      Spacer(),
+                      Text("\$"+ret[2])
+                    ],
+                  ),
                 ));
                 setState(() {
                   print("setstate called");
@@ -359,25 +393,29 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(Icons.menu, color: mode==1?colorselected:unselected,),
+                      icon: Icon(
+                        Icons.menu,
+                        color: mode == 1 ? colorselected : unselected,
+                      ),
                       onPressed: () {
                         setState(() {
-                          mode=1;
+                          mode = 1;
                         });
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.table_chart, color: mode==2?colorselected:unselected),
+                      icon: Icon(Icons.table_chart,
+                          color: mode == 2 ? colorselected : unselected),
                       onPressed: () {
                         setState(() {
-                          mode=2;
+                          mode = 2;
                         });
                       },
                     )
                   ],
                 ),
               ),
-              mode==1?mode1:mode2
+              mode == 1 ? mode1 : mode2,
             ],
           )
         ],
@@ -394,7 +432,8 @@ class DetailScreen extends StatelessWidget {
         child: Center(
           child: Hero(
             tag: 'imageHero',
-            child: PhotoView(imageProvider: AssetImage("assets/images/Berlin.jpg")),
+            child: PhotoView(
+                imageProvider: AssetImage("assets/images/Berlin.jpg")),
           ),
         ),
         onTap: () {
