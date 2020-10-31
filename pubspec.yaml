@@ -39,6 +39,7 @@ dependencies:
   firebase_image: ^0.2.0
   fluttertoast: ^7.1.1
   photo_view: ^0.10.2
+  social_share: ^2.0.5
 
 dev_dependencies:
   flutter_test:

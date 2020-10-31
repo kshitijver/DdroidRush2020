@@ -7,12 +7,10 @@ import 'add_trip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'dart:math';
+import 'package:social_share/social_share.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -43,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String phototitle;
   Image userimg; int nophoto=0; int nophoto1=0;
   int mode = 1;
-  String uid;
+  String uid; String dest; String date;
   Color colorselected = Colors.black;
   Color unselected = Colors.grey;
   Map<String,dynamic> data;
@@ -108,6 +106,8 @@ class _ProfilePageState extends State<ProfilePage> {
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {
                 print(doc['Expenditure'.toString()]);
+                dest=doc['Destination'];
+                date=doc['Date'];
                 list.add(ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -141,6 +141,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               value: 1,
                             ),
+                        PopupMenuItem(
+                          child: Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Text('Share to Whatsapp'),
+                          ),
+                          value: 2,
+                        )
                           ],
                       onSelected: ((value) async {
                         if (value == 1) {
@@ -150,6 +157,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 .delete();
                           });
                         }
+                        if(value ==2)
+                          {
+                            await SocialShare.shareWhatsapp("I went on a trip to $dest on $date");
+                          }
                       })),
                 ));
                 setState(() {

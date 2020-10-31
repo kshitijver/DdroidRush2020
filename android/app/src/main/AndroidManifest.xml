@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.kshitijv.expendisureapp">
 <!--    <uses-permission android:name="android.permission.INTERNET"/>-->
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
@@ -11,6 +12,16 @@
         android:label="expendisureapp"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.mapbox.token" android:value="pk.eyJ1IjoiYWRyYWsiLCJhIjoiY2tncm1tM3dnMDNjNzJ6cHA4MTB2NndhMiJ9.XWFvMU48f9wTjQZZ4NPdOQ" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.com.shekarmudaliyar.social_share"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -33,4 +44,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
 </manifest>
