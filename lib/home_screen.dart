@@ -66,12 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Color(0xff3A4266),
       body: SafeArea(
         child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment(0.0, -1.0),
-                end: Alignment(0.0, 1.0),
-                colors: [Color(0xff3A4266), Color(0xff262E45)]),
-          ),
+//          decoration: BoxDecoration(
+//            gradient: LinearGradient(
+//                begin: Alignment(0.0, -1.0),
+//                end: Alignment(0.0, 1.0),
+//                colors: [Color(0xff3A4266), Color(0xff262E45)]),
+//          ),
           child: ListView(
             children: <Widget>[
               Container(
@@ -148,17 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: SizedBox(
                       width: double.infinity,
-                    ),
-                  ),
-                  Container(
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text(
-                        'See all',
-                        style: TextStyle(
-                          color: Colors.white54,
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -289,12 +278,14 @@ class CategoryOption extends StatelessWidget {
 }
 
 class CityCards extends StatefulWidget {
-  final Image image;
   final String country;
   final String city;
-  final rating;
+  final String rating;
+  final double latitude;
+  final double longitude;
 
-  CityCards({this.image, this.city, this.country, this.rating});
+  CityCards(
+      {this.city, this.country, this.rating, this.longitude, this.latitude});
 
   @override
   _CityCardsState createState() => _CityCardsState();
@@ -305,12 +296,16 @@ class _CityCardsState extends State<CityCards> {
   var image;
   var city;
   var rating;
+  var latitude;
+  var longitude;
 
   @override
   void initState() {
     country = widget.country;
     city = widget.city;
     rating = widget.rating;
+    latitude = widget.latitude;
+    longitude = widget.longitude;
     getImage(context, city).then((value) {
       setState(() {
         image = value;
@@ -343,13 +338,18 @@ class _CityCardsState extends State<CityCards> {
         : GestureDetector(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ContentPage(
-                            country: country,
-                            image: image,
-                            city: city,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContentPage(
+                    country: country,
+                    image: image,
+                    city: city,
+                    rating: rating,
+                    latitude: latitude,
+                    longitude: longitude,
+                  ),
+                ),
+              );
             },
             child: Container(
               decoration: BoxDecoration(
@@ -395,7 +395,7 @@ class _CityCardsState extends State<CityCards> {
                             child: Container(
 //                    padding: EdgeInsets.all(6),
                               child: Text(
-                                country,
+                                city,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 15),
                               ),
@@ -408,7 +408,7 @@ class _CityCardsState extends State<CityCards> {
                             child: Container(
 //                    padding: EdgeInsets.all(6),
                               child: Text(
-                                city,
+                                country,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12),
                               ),
@@ -464,12 +464,15 @@ class _CityCardBuilderState extends State<CityCardBuilder> {
             final cityName = citycard.data()['city'];
             final countryName = citycard.data()['country'];
             final placeRating = citycard.data()['rating'];
+            final latitude = citycard.data()['latitude'];
+            final longitude = citycard.data()['longitude'];
 
             cityCard = CityCards(
-              city: cityName,
-              country: countryName,
-              rating: placeRating,
-            );
+                city: cityName,
+                country: countryName,
+                rating: placeRating,
+                latitude: latitude,
+                longitude: longitude);
             cityCards.add(cityCard);
           }
 
