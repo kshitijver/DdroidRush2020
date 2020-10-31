@@ -195,6 +195,14 @@ class _ProfilePageState extends State<ProfilePage> {
         uid=curr.uid;
         await _img.startUploadMeta(file, 'TripPhotos/$uid\_$nophoto1.png', metadata);
         Navigator.pop(context);
+        Fluttertoast.showToast(
+            msg: "Image has been uploaded. Please come back later to see it here!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 3,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 12.0);
       } catch (e) {
         Fluttertoast.showToast(
             msg: e.message,
@@ -340,6 +348,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [Text(ret[1]), Spacer(), Text("\$" + ret[2])],
                   ),
                 ));
+                Fluttertoast.showToast(
+                    msg: "Trip has been uploaded. Please come back later for full functionality!",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 3,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 12.0);
                 setState(() {
                   print("setstate called");
                 });
