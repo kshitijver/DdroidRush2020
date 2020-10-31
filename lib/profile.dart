@@ -370,7 +370,7 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Hero(
-                tag: 'tag',
+                tag: 'Avatar',
                 child: Container(
                   height: 125.0,
                   width: 125.0,

@@ -107,19 +107,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               labelText: 'Search term'),
                         ),
                       ),
-                      Container(
-                        child: IconButton(
-                          icon: Icon(Icons.account_circle),
-                          iconSize: 40.0,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfilePage(
-                                          curr: curr,
-                                        )));
-                            print(curr.displayName);
-                          },
+                      Hero(
+                        tag: "Avatar",
+                        child: Container(
+                          child: IconButton(
+                            icon: Icon(Icons.account_circle),
+                            iconSize: 40.0,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage(
+                                            curr: curr,
+                                          )));
+                              print(curr.displayName);
+                            },
+                          ),
                         ),
                       )
                     ],
