@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:math';
+import 'package:flutter/src/widgets/framework.dart';
 
 class ProfilePage extends StatefulWidget {
   final User curr;
@@ -40,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File file;
   bool uploaded = false;
   String phototitle;
-  Image userimg; int nophoto=0;
+  Image userimg; int nophoto=0; int nophoto1=0;
   int mode = 1;
   String uid;
   Color colorselected = Colors.black;
@@ -49,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   firebase_storage.StorageReference ref =
       firebase_storage.FirebaseStorage.instance.ref().child('destinations');
   firebase_storage.StorageMetadata metadata;
+  CollectionReference photon = FirebaseFirestore.instance.collection('PhotoNumber');
   @override
   void initState() {
     curr = widget.curr;
@@ -60,46 +62,28 @@ class _ProfilePageState extends State<ProfilePage> {
         .then((DocumentSnapshot docSnapshot)
             {
               print(docSnapshot.data());
-              nophoto=docSnapshot?.data()['number'];
+              nophoto=docSnapshot.data()['number'];
+              for(int i=1;i<=nophoto;i++)
+              {
+                Image m;
+                uid=curr.uid;
+                handler?.getImage(context, 'TripPhotos/$uid\_$i.png')?.then((value)
+                {
+                  m=value;
+                  images.add(GestureDetector(
+                    child: PhotoView(
+                      imageProvider: m.image,
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return DetailScreen(display: m,);
+                      }));
+                    },
+                  ));
+                });
+              }
             }
             );
-
-    print(nophoto);
-    for(int i=1;i<nophoto;i++)
-      {
-        Image m;
-        uid=curr.uid;
-        handler?.getImage(context, 'TripPhotos/$uid\_$nophoto.png')?.then((value)
-        {
-          m=value;
-          images.add(GestureDetector(
-            child: Hero(
-              tag: 'imageHero',
-              child: PhotoView(
-                imageProvider: m.image,
-              ),
-            ),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return DetailScreen();
-              }));
-            },
-          ));
-        });
-      }
-    images.add(GestureDetector(
-      child: Hero(
-        tag: 'imageHero',
-        child: PhotoView(
-          imageProvider: AssetImage("assets/images/Berlin.jpg"),
-        ),
-      ),
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return DetailScreen();
-        }));
-      },
-    ));
     uid = curr.uid;
     print(curr.email);
     String em=curr.email;
@@ -189,8 +173,16 @@ class _ProfilePageState extends State<ProfilePage> {
     if (uploaded == true) {
       try {
         print("try block triggered");
-        nophoto++;
-        await _img.startUploadMeta(file, 'TripPhotos/$uid\_$nophoto.png', metadata);
+        nophoto1=nophoto+1;
+        uid=curr.uid;
+        print("Nophoto is $nophoto1");
+        await photon.doc('$uid')
+            .set({
+          'uid': uid,
+          'number': nophoto1// 42
+        });
+        uid=curr.uid;
+        await _img.startUploadMeta(file, 'TripPhotos/$uid\_$nophoto1.png', metadata);
         Navigator.pop(context);
       } catch (e) {
         Fluttertoast.showToast(
@@ -222,11 +214,9 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisSpacing: 1, //horizontal space
               crossAxisSpacing: 1, //vertical space
               crossAxisCount: 3, //number of images for a row
-              children: images),
+              children: images
+          ),
         ),
-        SizedBox(
-          height: 1000,
-        )
       ],
     );
     return Scaffold(
@@ -458,6 +448,8 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class DetailScreen extends StatelessWidget {
+  final Image display;
+  DetailScreen({this.display});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -466,7 +458,7 @@ class DetailScreen extends StatelessWidget {
           child: Hero(
             tag: 'imageHero',
             child: PhotoView(
-                imageProvider: AssetImage("assets/images/Berlin.jpg")),
+                imageProvider: display.image),
           ),
         ),
         onTap: () {
