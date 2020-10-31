@@ -9,7 +9,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="expendisureapp"
+        android:label="Graphite"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.mapbox.token" android:value="pk.eyJ1IjoiYWRyYWsiLCJhIjoiY2tncm1tM3dnMDNjNzJ6cHA4MTB2NndhMiJ9.XWFvMU48f9wTjQZZ4NPdOQ" />
         <provider
