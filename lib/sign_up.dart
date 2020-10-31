@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 Future<File> getImageFileFromAssets(String path) async {
@@ -32,11 +33,27 @@ class _SignUpState extends State<SignUp> {
   String email, password,name; image_handler _img=image_handler();
   fireauth _fire=fireauth(); Image userimg; bottomsheet bs=bottomsheet();
   PickedFile _imageFile; File file; Color loader=Colors.white; bool uploaded=false;
+  CollectionReference photonos = FirebaseFirestore.instance.collection('PhotoNumber');
+  var ret= List<String>();
   @override
   void initState() {
     userimg=Image.asset('assets/images/avatar.png');
     super.initState();
   }
+
+  Future<void> createDoc(User us) {
+    String uid=us.uid;
+    return photonos.doc('$uid')
+        .set({
+      'uid': us.uid,
+      'number': 0// 42
+    })
+        .then((value) { print("Trip Added");
+    ret.add(us.uid);
+    ret.add(0.toString());})
+        .catchError((error) => print("Failed to add trip: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                       await user.user.updateEmail(email);
                       _fire.Reload();
                       User curr=await _fire.Current();
-
+                      await createDoc(curr);
                       await _img.startUpload(file, 'ProfilePictures/$email.png');
 
                       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: curr)));}

@@ -28,6 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final _fire = fireauth();
   User curr;
   CollectionReference trips = FirebaseFirestore.instance.collection('Trips');
+  CollectionReference photonos =
+      FirebaseFirestore.instance.collection('PhotoNumber');
   var list = List<ListTile>();
   var images = List<GestureDetector>();
   int totexp = 0;
@@ -38,17 +40,53 @@ class _ProfilePageState extends State<ProfilePage> {
   File file;
   bool uploaded = false;
   String phototitle;
-  Image userimg;
+  Image userimg; int nophoto=0;
   int mode = 1;
   String uid;
   Color colorselected = Colors.black;
   Color unselected = Colors.grey;
+  Map<String,dynamic> data;
   firebase_storage.StorageReference ref =
       firebase_storage.FirebaseStorage.instance.ref().child('destinations');
   firebase_storage.StorageMetadata metadata;
   @override
   void initState() {
     curr = widget.curr;
+    String uid=curr.uid;
+    print(uid);
+    FirebaseFirestore.instance
+        .collection('PhotoNumber').doc('$uid')
+        .get()
+        .then((DocumentSnapshot docSnapshot)
+            {
+              print(docSnapshot.data());
+              nophoto=docSnapshot?.data()['number'];
+            }
+            );
+
+    print(nophoto);
+    for(int i=1;i<nophoto;i++)
+      {
+        Image m;
+        uid=curr.uid;
+        handler?.getImage(context, 'TripPhotos/$uid\_$nophoto.png')?.then((value)
+        {
+          m=value;
+          images.add(GestureDetector(
+            child: Hero(
+              tag: 'imageHero',
+              child: PhotoView(
+                imageProvider: m.image,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return DetailScreen();
+              }));
+            },
+          ));
+        });
+      }
     images.add(GestureDetector(
       child: Hero(
         tag: 'imageHero',
@@ -64,8 +102,9 @@ class _ProfilePageState extends State<ProfilePage> {
     ));
     uid = curr.uid;
     print(curr.email);
+    String em=curr.email;
 
-    handler?.getImage(context, curr.email)?.then((userimg) {
+    handler?.getImage(context, 'ProfilePictures/$em.png')?.then((userimg) {
       setState(() {
         userimage = userimg;
       });
@@ -121,9 +160,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                       onSelected: ((value) async {
                         if (value == 1) {
-                            setState(() async{
-                              await trips.doc(doc['Destination']+doc['Date']).delete();
-                            });
+                          setState(() async {
+                            await trips
+                                .doc(doc['Destination'] + doc['Date'])
+                                .delete();
+                          });
                         }
                       })),
                 ));
@@ -143,19 +184,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.didChangeDependencies();
   }
 
-  static const _chars =
-      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  Random _rnd = Random();
-
-  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   uploadimage() async {
     if (uploaded == true) {
       try {
         print("try block triggered");
-        String rnd = getRandomString(15);
-        await _img.startUploadMeta(file, 'TripPhotos/$uid\_$rnd.png', metadata);
+        nophoto++;
+        await _img.startUploadMeta(file, 'TripPhotos/$uid\_$nophoto.png', metadata);
         Navigator.pop(context);
       } catch (e) {
         Fluttertoast.showToast(
@@ -189,7 +224,9 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisCount: 3, //number of images for a row
               children: images),
         ),
-        SizedBox(height: 1000,)
+        SizedBox(
+          height: 1000,
+        )
       ],
     );
     return Scaffold(
@@ -299,11 +336,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   title: Text(ret[0]),
                   subtitle: Row(
-                    children: [
-                      Text(ret[1]),
-                      Spacer(),
-                      Text("\$"+ret[2])
-                    ],
+                    children: [Text(ret[1]), Spacer(), Text("\$" + ret[2])],
                   ),
                 ));
                 setState(() {
