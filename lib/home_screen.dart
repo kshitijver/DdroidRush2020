@@ -37,6 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
         fontSize: 12.0);
+    if(!curr.emailVerified)
+      {
+        Fluttertoast.showToast(
+            msg: "Verify email to sign in again",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 12.0);
+      }
     super.initState();
     print(curr.displayName);
     print(curr.email);
@@ -107,22 +118,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               labelText: 'Search term'),
                         ),
                       ),
-                      Hero(
-                        tag: "Avatar",
-                        child: Container(
-                          child: IconButton(
-                            icon: Icon(Icons.account_circle),
-                            iconSize: 40.0,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfilePage(
-                                            curr: curr,
-                                          )));
-                              print(curr.displayName);
-                            },
-                          ),
+                      Container(
+                        child: IconButton(
+                          icon: Icon(Icons.account_circle),
+                          iconSize: 40.0,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePage(
+                                          curr: curr,
+                                        )));
+                            print(curr.displayName);
+                          },
                         ),
                       )
                     ],

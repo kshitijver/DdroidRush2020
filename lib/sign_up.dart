@@ -170,6 +170,7 @@ class _SignUpState extends State<SignUp> {
                       User curr=await _fire.Current();
                       await createDoc(curr);
                       await _img.startUpload(file, 'ProfilePictures/$email.png');
+                      await curr.sendEmailVerification();
 
                       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: curr)));}
                       catch(e)
