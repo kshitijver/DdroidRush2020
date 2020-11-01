@@ -382,12 +382,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           await trips
                               .doc(ret[0]+ret[1])
                               .delete();
-                          setState(() {
-                            list.removeLast();
-                          });
 
                           Fluttertoast.showToast(
-                              msg: "Trip deleted",
+                              msg: "Trip deleted. Please refresh page.",
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.CENTER,
                               timeInSecForIosWeb: 3,
