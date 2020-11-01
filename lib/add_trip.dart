@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'widgets/appointment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 
 class MySpecialCard extends StatefulWidget {
   final User curr;
@@ -78,6 +80,8 @@ class _MySpecialCardState extends State<MySpecialCard> {
                           borderSide: BorderSide.none),
                       hintText: "Total Expenditure"),
                   onChanged: (value){exp=int.parse(value);},
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                 ),
               ),
               SizedBox(
@@ -95,8 +99,22 @@ class _MySpecialCardState extends State<MySpecialCard> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
                   onPressed: ()
                     async{
-                    await addTrip(curr, "${AppointmentContainerState.selectedDate.toLocal()}".split(' ')[0], exp, AppointmentContainerState.dest);
+                    if(exp!=null && AppointmentContainerState.dest!=null)
+                        {
+                          await addTrip(curr, "${AppointmentContainerState.selectedDate.toLocal()}".split(' ')[0], exp, AppointmentContainerState.dest);
                     Navigator.pop(context, ret);
+                    }
+                    else
+                      {
+                        Fluttertoast.showToast(
+                            msg: "Please enter all details",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 12.0);
+                      }
                     },
                 ),
                 width: double.infinity,

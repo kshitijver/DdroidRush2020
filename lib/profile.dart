@@ -369,16 +369,13 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Hero(
-                tag: 'Avatar',
-                child: Container(
-                  height: 125.0,
-                  width: 125.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(62.5),
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: userimage?.image)),
-                ),
+              Container(
+                height: 125.0,
+                width: 125.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(62.5),
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: userimage?.image)),
               ),
               SizedBox(height: 25.0),
               Text(

@@ -54,8 +54,23 @@ class _SignInPageState extends State<SignInPage> {
                     onPressed: ()
                     async{
                       try
-                      {UserCredential user=await _fire.EmailPass(email, password);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: user.user)));}
+                      {
+                        UserCredential user=await _fire.EmailPass(email, password);
+                        if(!user.user.emailVerified)
+                          {
+                            Fluttertoast.showToast(
+                                msg: "Email not verified",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 3,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 12.0
+                            );
+                            _fire.out();
+                          }
+                        else
+                      {Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(curr: user.user)));}}
                       catch(e)
                       {
                         Fluttertoast.showToast(
