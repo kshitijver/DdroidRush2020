@@ -155,6 +155,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             await trips
                                 .doc(doc['Destination'] + doc['Date'])
                                 .delete();
+                            Fluttertoast.showToast(
+                                msg: "Trip deleted",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 3,
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                fontSize: 12.0);
                           });
                         }
                         if(value ==2)
@@ -347,9 +355,52 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: Row(
                     children: [Text(ret[1]), Spacer(), Text("\$" + ret[2])],
                   ),
+                  trailing: PopupMenuButton(
+                  icon: Icon(
+                  Icons.more_vert,
+                  color: Colors.black,
+                ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text('Delete trip'),
+                        ),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text('Share to Whatsapp'),
+                        ),
+                        value: 2,
+                      )
+                    ],
+                    onSelected: ((value) async {
+                      if (value == 1) {
+                        setState(() async {
+                          await trips
+                              .doc(ret[0]+ret[1])
+                              .delete();
+
+                          Fluttertoast.showToast(
+                              msg: "Trip deleted. Please refresh page.",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 3,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 12.0);
+                        });
+                      }
+                      if(value ==2)
+                      {
+                        await SocialShare.shareWhatsapp("I went on a trip to $dest on $date");
+                      }
+                    })),
                 ));
                 Fluttertoast.showToast(
-                    msg: "Trip has been uploaded. Please come back later for full functionality!",
+                    msg: "Trip created!",
                     toastLength: Toast.LENGTH_LONG,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 3,
@@ -369,16 +420,13 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Hero(
-                tag: 'Avatar',
-                child: Container(
-                  height: 125.0,
-                  width: 125.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(62.5),
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: userimage?.image)),
-                ),
+              Container(
+                height: 125.0,
+                width: 125.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(62.5),
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: userimage?.image)),
               ),
               SizedBox(height: 25.0),
               Text(
