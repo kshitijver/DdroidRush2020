@@ -48,21 +48,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                child: ButtonTheme(
-                                  minWidth: double.infinity,
-                                  child: RaisedButton(
-                                    color: Colors.black,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                                    child: Text("Sign in with Google",style: TextStyle(color: Colors.white),),
-                                    onPressed: ()async{
-                                       UserCredential user=await _auth.googleSignIn();
-                                    },
-                                  ),
-                                ),
-                              ),
+//                              Container(
+//                                width: double.infinity,
+//                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+//                                child: ButtonTheme(
+//                                  minWidth: double.infinity,
+//                                  child: RaisedButton(
+//                                    color: Colors.black,
+//                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+//                                    child: Text("Sign in with Google",style: TextStyle(color: Colors.white),),
+//                                    onPressed: ()async{
+//                                       UserCredential user=await _auth.googleSignIn();
+//                                    },
+//                                  ),
+//                                ),
+//                              ),
                               RoundOutlineButton(tex: "Sign In",onpress:(){ Navigator.push(context,MaterialPageRoute(builder: (context)=>SignInPage()));}),
                               RoundOutlineButton(tex: "Sign Up",onpress:(){ Navigator.push(context,MaterialPageRoute(builder: (context)=>SignUp()));}),
 
